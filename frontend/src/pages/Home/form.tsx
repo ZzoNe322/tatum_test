@@ -14,16 +14,25 @@ interface BalanceApiResponse {
 function Form() {
   const [inputValue, setInputValue] = useState(""); // State to hold the input value
   const [labelText, setLabelText] = useState(""); // State to hold the label text
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleButtonClick = async () => {
     if (!isAddress(inputValue)) {
-      setLabelText('Incorrect address provided!');
+      setLabelText('Error: Incorrect address provided!');
       return;
     }
-    const balanceReq = await fetch(`/api/eth-balance?address=${inputValue}`);
-    const balanceRes: BalanceApiResponse = await balanceReq.json();
+    setIsLoading(true);
 
-    setLabelText(`${balanceRes.data ? 'Balance: ' + balanceRes.data : `Error: ${balanceRes.error?.message.join() ?? 'Unknown Error'}`}`);
+    try {
+        const balanceReq = await fetch(`/api/eth-balance?address=${inputValue}`);
+        const balanceRes: BalanceApiResponse = await balanceReq.json();
+        setLabelText(
+            `${balanceRes.data ? 'Balance: ' + balanceRes.data : `Error: ${balanceRes.error?.message.join() || 'Unknown Error'}`}`
+        );
+    } catch (e) {
+        setLabelText(`Error: ${e.message ?? 'Unknown Error'}`);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -37,8 +46,8 @@ function Form() {
           style={{ padding: "5px", width: "320px" }}
         />
       </p>
-      <button onClick={handleButtonClick} style={{ padding: "5px" }}>
-        Click Me
+      <button onClick={handleButtonClick} style={{ padding: "5px" }} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Click Me"}
       </button>
       <p style={{ padding: "5px", fontSize: "16px", fontWeight: "bold" }}>
         {labelText}
