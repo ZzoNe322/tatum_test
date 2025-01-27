@@ -2,6 +2,8 @@
 
 -   `npm run install:all` - Install dependencies for back-end and front-end
 
+-   create `.env` file in `backend/` directory (check .env.example for the list of vars)
+
 -   `npm run start` - Starts both apps
 
 
