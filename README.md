@@ -45,3 +45,5 @@ _Same with the project structure -- it have basic separation of components and p
 
 - Small fixes
 
+- Changed link and alt to Tatum for the logo :)
+
