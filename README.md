@@ -1,15 +1,21 @@
-# `create-preact`
-
-<h2 align="center">
-  <img height="256" width="256" src="./src/assets/preact.svg">
-</h2>
-
-<h3 align="center">Get started using Preact and Vite!</h3>
-
 ## Getting Started
 
--   `npm run dev` - Starts a dev server at http://localhost:5173/
+-   `npm run install:all` - Install dependencies for back-end and front-end
 
--   `npm run build` - Builds for production, emitting to `dist/`
+-   `npm run start` - Starts both apps
 
--   `npm run preview` - Starts a server at http://localhost:4173/ to test production build locally
+
+---
+
+The task: "make all the necessary changes to put the application and repository into a production-quality state"
+
+
+
+- Added backend proxy for requests to Tatum API
+
+- Added request validation and error handling
+
+- Added validation on front-end for wallet address using `web3-validator`
+
+- Brought back the header for front-end app
+

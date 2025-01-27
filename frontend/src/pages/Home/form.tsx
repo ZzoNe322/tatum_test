@@ -1,25 +1,29 @@
-// App.js
-import { Network, TatumSDK, Ethereum } from "@tatumio/tatum";
 import React, { useState } from "react";
+import { isAddress } from 'web3-validator';
+
+interface BalanceApiResponse {
+    data: number;
+    status: 'SUCCESS' | 'ERROR';
+    error?: {
+        message: string[];
+        code: string;
+        dashboardLog: string | null;
+    }
+}
 
 function Form() {
   const [inputValue, setInputValue] = useState(""); // State to hold the input value
   const [labelText, setLabelText] = useState(""); // State to hold the label text
 
   const handleButtonClick = async () => {
-    const tatum = await TatumSDK.init<Ethereum>({
-      network: Network.ETHEREUM,
-      apiKey: { v4: "t-65ddbb2bb792d6001be685d9-442dd087e58442acac87f5f9" },
-      verbose: true,
-    });
-    const balance = await tatum.address.getBalance({
-      addresses: [inputValue],
-    });
-    const balanceData = balance.data.filter(
-      (asset) => asset.asset === "ETH"
-    )[0];
+    if (!isAddress(inputValue)) {
+      setLabelText('Incorrect address provided!');
+      return;
+    }
+    const balanceReq = await fetch(`/api/eth-balance?address=${inputValue}`);
+    const balanceRes: BalanceApiResponse = await balanceReq.json();
 
-    setLabelText(`Balance: ${balanceData.balance}`);
+    setLabelText(`${balanceRes.data ? 'Balance: ' + balanceRes.data : `Error: ${balanceRes.error?.message.join() ?? 'Unknown Error'}`}`);
   };
 
   return (
